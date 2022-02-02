@@ -18,15 +18,18 @@
     img{
         margin-right: 8px;
     }
-
-    //quando o botão estiver desabilitado e passar o ponteiro do mouse
-    &:not(:disabled):hover{
+    &.outlined {
+        background: #FFF;
+        border: 1px solid #835afd;
+        color: #835afd;
+      }
+    
+      &:not(:disabled):hover {
         filter: brightness(0.9);
-    }
-
-    &:disabled{
+      }
+    
+      &:disabled {
         opacity: 0.6;
         cursor: not-allowed;
-
+      }
     }
-}
