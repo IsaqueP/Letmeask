@@ -11,36 +11,40 @@ import { useAuth } from '../hooks/useAuth'
 import '../styles/auth.scss';
 import { FormEvent, useState } from 'react'
 
-export function Home(){
-
+export function Home() {
     const history = useNavigate();
     const { user, signInWithGoogle } = useAuth()
-    const [roomCode, setRoomCode] = useState('')
-
-    async function handleCreateRoom(){
-        if(!user){
-            signInWithGoogle()
-        }
-
-        history('/rooms/new')
+    const [roomCode, setRoomCode] = useState('');
+  
+    async function handleCreateRoom() {
+      if (!user) {
+        await signInWithGoogle()
+      }
+  
+      history('/rooms/new');
     }
-
-    async function handleJoinRoom(event: FormEvent){
-        event.preventDefault()
-
-        if(roomCode.trim() == ''){
-            return;
-        }
-
-        const roomRef = await database.ref(`rooms/${roomCode}`).get()
-        if(!roomRef.exists()){
-            alert('Room does not exists.')
-            return;
-        }
-
-        history(`/rooms/${roomCode}`)
+  
+    async function handleJoinRoom(event: FormEvent) {
+      event.preventDefault();
+  
+      if (roomCode.trim() === '') {
+        return;
+      }
+  
+      const roomRef = await database.ref(`rooms/${roomCode}`).get();
+  
+      if (!roomRef.exists()) {
+        alert('Room does not exists.');
+        return;
+      }
+  
+      if (roomRef.val().endedAt) {
+        alert('Room already closed.');
+        return;
+      }
+  
+      history(`/rooms/${roomCode}`);
     }
-
     return(
        <div id="page-auth">
            <aside>
